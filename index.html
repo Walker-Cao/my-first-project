@@ -10,11 +10,12 @@
         .card { background: #fff; border-radius: 12px; padding: 24px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
         h1 { font-size: 20px; text-align: center; margin-bottom: 16px; color: #005eb8; }
         .tips { background: #e8f3ff; padding: 12px 14px; border-radius: 8px; font-size: 14px; color: #005eb8; margin-bottom: 20px; }
-        .btn { display: block; width: 100%; padding: 14px; background: #005eb8; color: #fff; text-align: center; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 500; margin: 20px 0; border: none; cursor: pointer; }
-        .copy-btn { background: #f0f2f5; color: #333; margin-top: 0; font-size: 14px; padding: 10px; }
-        .declaration { font-size: 14px; color: #555; border-top: 1px solid #eee; padding-top: 18px; margin-top: 8px; }
+        .btn { display: block; width: 100%; padding: 14px; background: #005eb8; color: #fff; text-align: center; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 500; margin: 12px 0; border: none; cursor: pointer; }
+        .btn-secondary { background: #f0f2f5; color: #333; font-size: 14px; padding: 10px; }
+        .declaration { font-size: 14px; color: #555; border-top: 1px solid #eee; padding-top: 18px; margin-top: 20px; }
         .declaration h3 { font-size: 15px; margin-bottom: 10px; color: #333; }
         .declaration p { margin-bottom: 10px; }
+        .fallback { font-size: 13px; color: #666; text-align: center; margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -22,15 +23,17 @@
         <h1>中银人寿财富管理实习计划申请</h1>
         
         <div class="tips">
-            点击下方按钮将自动唤起邮箱并预填申请内容，请手动附上学生证副本后发送。<br>
-            微信内点击后，请选择右上角「在浏览器中打开」。
+            1. 点击下方按钮自动唤起邮箱并预填申请内容<br>
+            2. 若点击无反应，请使用下方复制按钮手动粘贴发送
         </div>
 
-        <a class="btn" href=" ">
+        <a class="btn" id="mailBtn" href=" ">
             一键发送申请邮件
         </a >
+        <p class="fallback">如点击无反应，请使用下方复制功能</p >
 
-        <button class="btn copy-btn" onclick="copyEmail()">复制邮箱地址：diana_d_zhao@wm-boclife.com.hk</button>
+        <button class="btn btn-secondary" onclick="copyEmail()">复制收件邮箱</button>
+        <button class="btn btn-secondary" onclick="copyContent()">复制邮件正文</button>
 
         <div class="declaration">
             <h3>个人资料收集声明</h3>
@@ -45,11 +48,41 @@
     </div>
 
     <script>
+        const email = 'diana_d_zhao@wm-boclife.com.hk';
+        const mailContent = `敬启者：
+
+本人申请参加中银人寿财富管理实习计划课程，已阅读并同意《个人资料收集声明》。
+
+个人信息如下：
+1. 姓名：
+2. 联络电话：
+3. 学校电邮：
+4. 学生证副本（请手动添加附件）`;
+
         function copyEmail() {
-            navigator.clipboard.writeText('diana_d_zhao@wm-boclife.com.hk').then(() => {
-                alert('邮箱地址已复制');
+            navigator.clipboard.writeText(email).then(() => {
+                alert('邮箱地址已复制，可直接粘贴到收件人栏');
+            }).catch(() => {
+                alert('复制失败，请手动长按复制：' + email);
             });
         }
+
+        function copyContent() {
+            navigator.clipboard.writeText(mailContent).then(() => {
+                alert('邮件正文已复制，可直接粘贴到邮箱正文');
+            }).catch(() => {
+                alert('复制失败，请手动长按页面文字复制');
+            });
+        }
+
+        // 唤起失败兜底提示
+        document.getElementById('mailBtn').addEventListener('click', function() {
+            setTimeout(() => {
+                if (!document.hidden) {
+                    alert('未检测到邮箱跳转，请使用下方复制按钮手动粘贴发送');
+                }
+            }, 2000);
+        });
     </script>
 </body>
 </html>
